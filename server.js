@@ -1,7 +1,6 @@
 const app = require("./app");
 const envConfig = require("./config");
 const MongoContainer = require("./models/containers/mongo.container");
-const FirebaseContainer = require("./models/containers/firebase.container");
 
 const PORT = process.env.PORT || 8080;
 

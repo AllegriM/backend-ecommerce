@@ -5,7 +5,7 @@ const collection = "carritos";
 
 const carritosSchema = new Schema({
   nombre: { type: String },
-  email: { type: String, unique: true }, 
+  email: { type: String, unique: true },
   website: { type: String },
   image: { type: String }
 });
@@ -15,13 +15,29 @@ class CarritosMongoDao extends MongoContainer {
     super(collection, carritosSchema);
   }
 
-  async addProductToCart(idCarrito, idProducto) {
-  
-    this.model.updateOne({ _id: idCarrito }, {
-      $push: {
-        productos: [idProducto]
-      }
-    })
+  async addProductToCart(cartId, productId) {
+    try {
+      const updatedProductsToCart = await this.model.findByIdAndUpdate(cartId, {
+        $push: {
+          products: [productId],
+        },
+      });
+      return updatedProductsToCart;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  async removeProductFromCart(cartId, productId) {
+    try {
+      const updatedProductsToCart = await this.model.findByIdAndUpdate(cartId, {
+        $pull: {
+          products: [productId],
+        },
+      });
+      return updatedProductsToCart;
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 }
 
