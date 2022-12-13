@@ -9,8 +9,17 @@ class ProductsController {
   async getProducts(req, res, next) {
     try {
       const products = await productsDao.getAll();
-      const response = successResponse(products);
-      res.status(HTTP_STATUS.OK).json(response);
+      console.log(products)
+      if(req.session.name) {
+        let content = products.length;
+        let boolean = content.length !== 0;
+        return res.render("index.hbs", {
+          list: products,
+          showList: boolean,
+          name: req.session.name,
+        });
+      }
+      return res.redirect("login")
     }
     catch(error) {
       next(error);
@@ -33,7 +42,7 @@ class ProductsController {
     try {
       const newProduct = await productsDao.save(req.body);
       const response = successResponse(newProduct);
-      res.status(HTTP_STATUS.CREATED).json(response);
+      res.status(HTTP_STATUS.CREATED).render("index.hbs");
     }
     catch(error) {
       next(error);
