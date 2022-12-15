@@ -7,19 +7,19 @@ const productsDao = new ProductsDao();
 class ProductsController {
 
   async getProducts(req, res, next) {
+    console.log(req.email)
     try {
       const products = await productsDao.getAll();
-      console.log(products)
-      if(req.session.name) {
+      if(req.email) {
         let content = products.length;
         let boolean = content.length !== 0;
         return res.render("index.hbs", {
           list: products,
           showList: boolean,
-          name: req.session.name,
+          user: req.email,
         });
       }
-      return res.redirect("login")
+      return res.redirect("signin")
     }
     catch(error) {
       next(error);
