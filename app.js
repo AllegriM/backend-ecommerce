@@ -9,11 +9,14 @@ const envConfig = require('./config')
 const dotenv = require('dotenv');
 const MongoStore =  require('connect-mongo')
 const passport = require('passport')
+const yargs =  require('yargs/yargs')(process.argv.slice(2))
 require('./passport/passport')
 const adavancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 dotenv.config();
 
 const app = express()
+const args = yargs.argv
+console.log(args)
 
 app.use(express.static("./views/layouts"));
 app.use(cookieParser())

@@ -2,7 +2,7 @@ const app = require("./app");
 const envConfig = require("./config");
 const MongoContainer = require("./models/containers/mongo.container");
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.argv[2] || 8080;
 
 
 // if (["memory", "firebase"].includes(envConfig.DATASOURCE || "")) {
