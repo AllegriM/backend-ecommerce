@@ -7,16 +7,14 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const envConfig = require('./config')
 const dotenv = require('dotenv');
-const MongoStore =  require('connect-mongo')
+const MongoStore = require('connect-mongo')
 const passport = require('passport')
-const yargs =  require('yargs/yargs')(process.argv.slice(2))
 require('./passport/passport')
 const adavancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+
 dotenv.config();
 
 const app = express()
-const args = yargs.argv
-console.log(args)
 
 app.use(express.static("./views/layouts"));
 app.use(cookieParser())
@@ -27,11 +25,11 @@ app.use(express.urlencoded({ extended: true }))
 app.engine(
     "hbs",
     expbs.engine({
-      defaultLayout: "main",
-      partialsDir: path.join(__dirname, "views/partials"),
-      extname: ".hbs",
+        defaultLayout: "main",
+        partialsDir: path.join(__dirname, "views/partials"),
+        extname: ".hbs",
     })
-  );
+);
 app.set("views", "./views");
 app.set("views engine", "hbs");
 
@@ -41,9 +39,9 @@ app.use(session({
         mongoOptions: adavancedOptions
     }),
     cookie: {
-      httpOnly: true,
-      secure: true, 
-      maxAge: 600000
+        httpOnly: true,
+        secure: true,
+        maxAge: 600000
     },
     rolling: true,
     secret: process.env.COOKIE_SECRET,

@@ -1,0 +1,6 @@
+pm2 start index.js --name 'server-main' -- -p 8080
+pm2 start index.js --name 'server-random' -- -m CLUSTER -p 8082
+	^ utiliza módulo cluster de Node para servir 4 instancias del servidor.
+pm2 start index.js --name 'server-random-2' -- -p 8083
+pm2 start index.js --name 'server-random-3' -- -p 8084
+pm2 start index.js --name 'server-random-4' -- -p 8085
