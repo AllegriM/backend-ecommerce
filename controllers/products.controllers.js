@@ -1,4 +1,5 @@
 const { HTTP_STATUS } = require("../constants/api.constants");
+const logger = require("../middlewares/logs.middleware");
 const { ProductsDao } = require("../models/daos/app.daos");
 const { successResponse } = require("../utils/api.utils");
 
@@ -7,10 +8,9 @@ const productsDao = new ProductsDao();
 class ProductsController {
 
   async getProducts(req, res, next) {
-    console.log(req.email)
     try {
       const products = await productsDao.getAll();
-      if(req.email) {
+      if (req.email) {
         let content = products.length;
         let boolean = content.length !== 0;
         return res.render("index.hbs", {
@@ -19,9 +19,10 @@ class ProductsController {
           user: req.email,
         });
       }
+      logger.info('[get] => /products');
       return res.redirect("signin")
     }
-    catch(error) {
+    catch (error) {
       next(error);
     }
   }
@@ -31,9 +32,10 @@ class ProductsController {
     try {
       const product = await productsDao.getById(id);
       const response = successResponse(product);
+      logger.info('[get] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
     }
-    catch(error) {
+    catch (error) {
       next(error);
     }
   }
@@ -42,9 +44,10 @@ class ProductsController {
     try {
       const newProduct = await productsDao.save(req.body);
       const response = successResponse(newProduct);
+      logger.info('[post] => /products');
       res.status(HTTP_STATUS.CREATED).render("index.hbs");
     }
-    catch(error) {
+    catch (error) {
       next(error);
     }
   }
@@ -54,9 +57,10 @@ class ProductsController {
     try {
       const updateProduct = await productsDao.update(id, req.body);
       const response = successResponse(updateProduct);
+      logger.info('[put] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
     }
-    catch(error) {
+    catch (error) {
       next(error);
     }
   }
@@ -66,9 +70,10 @@ class ProductsController {
     try {
       const deletedProduct = await productsDao.delete(id);
       const response = successResponse(deletedProduct);
+      logger.info('[del] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
     }
-    catch(error) {
+    catch (error) {
       next(error);
     }
   }

@@ -9,7 +9,7 @@ const router = express.Router();
 router.use('/cart', cartRoute)
 router.use('/products', productRoute)
 router.use('/', userRoute)
-router.use('/info', infoRoute)
+router.use('/', infoRoute)
 router.use('*', error)
 
 module.exports = router
