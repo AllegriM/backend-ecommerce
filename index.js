@@ -14,12 +14,12 @@ const session = require('express-session')
 const envConfig = require('./config')
 const dotenv = require('dotenv');
 const MongoStore = require('connect-mongo')
-const passport = require('passport')
-require('./passport/passport')
+const passport = require('./passport/passport')
 const adavancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+// const sendEmail = require('./utils/mailer.utils') EJECUTA EL ENVIO DE EMAIL
+// const smsSender = require('./utils/sms.utils')
 
 dotenv.config();
-
 const app = express()
 const httpServer = new HttpServer(app);
 
