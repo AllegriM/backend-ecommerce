@@ -1,3 +1,4 @@
+const { Mongoose } = require("mongoose");
 const { HTTP_STATUS } = require("../constants/api.constants");
 const logger = require("../middlewares/logs.middleware");
 const { ProductsDao } = require("../models/daos/app.daos");
@@ -13,14 +14,14 @@ class ProductsController {
       if (req.email) {
         let content = products.length;
         let boolean = content.length !== 0;
-        return res.render("index.hbs", {
+        return res.render("home.hbs", {
           list: products,
           showList: boolean,
           user: req.email,
         });
       }
       logger.info('[get] => /products');
-      return res.redirect("signin")
+      return res.render("products/index", { products })
     }
     catch (error) {
       next(error);
@@ -34,6 +35,7 @@ class ProductsController {
       const response = successResponse(product);
       logger.info('[get] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
+      return res.render("products/show", { product, user })
     }
     catch (error) {
       next(error);
@@ -41,11 +43,17 @@ class ProductsController {
   }
 
   async saveProduct(req, res, next) {
+    console.log(req.body)
     try {
-      const newProduct = await productsDao.save(req.body);
+      const product = {
+        timestamp: Date.now(),
+        ...req.body,
+      }
+
+      const newProduct = await productsDao.save(product);
       const response = successResponse(newProduct);
       logger.info('[post] => /products');
-      res.status(HTTP_STATUS.CREATED).render("index.hbs");
+      return res.status(HTTP_STATUS.CREATED).json(response);
     }
     catch (error) {
       next(error);

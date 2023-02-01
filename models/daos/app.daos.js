@@ -3,10 +3,10 @@ const envConfig = require("../../config");
 let ProductsDao;
 let CarritosDao;
 
-switch(envConfig.DATASOURCE) {
+switch (envConfig.DATASOURCE) {
   case 'mongo':
     ProductsDao = require('./productos/productos.mongo.dao');
-    CarritosDao = require('./carritos/carritos.mongo.dao');
+    CarritosDao = require('./carritos/carritos.mongo.dao').CarritosMongoDao;
     break;
   case 'firebase':
     ProductsDao = require('./productos/productos.firebase.dao');

@@ -70,6 +70,44 @@ class CarritosController {
     }
   }
 
+  async getCartProducts(req, res, next) {
+    const { id } = req.params;
+    try {
+      const cartProducts = await cartsDao.getProducts(id);
+      return cartProducts;
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addToCart(req, res, next) {
+    const { cartId, productId } = req.params;
+    const { quantity } = req.body;
+
+    try {
+      const updatedCart = await cartsDao.addItemToCart(cartId, productId, quantity);
+      if (!updatedCart) {
+        res.send('This item is already on your cart.');
+      }
+
+      res.redirect('/cart');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeFromCart(req, res, next) {
+    const { cartId, productId } = req.params;
+    try {
+      const updatedCart = await cartsDao.removeProduct(cartId, productId);
+      const response = successResponse(updatedCart);
+      res.status(HTTP_STATUS.OK).json(response);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
 }
 
 module.exports = new CarritosController();

@@ -1,15 +1,17 @@
+const logger = require("../middlewares/logs.middleware");
+
 const getSignIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        let user = req.user
-        console.log('user logueado')
-        res.render('products.hbs', { user })
-    }
-    return res.render('login.hbs')
+    logger.info('[GET] => /login');
+    res.sendFile('signin.html', { root: 'public' });
 }
 
 const signIn = async (req, res, next) => {
-    let user = req.email
-    res.render('index.hbs', { user })
+    try {
+        let user = req.email
+        return res.render('home.hbs', { user })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const getFailSignIn = (req, res, next) => {
@@ -17,7 +19,8 @@ const getFailSignIn = (req, res, next) => {
 }
 
 const getSignUp = (req, res) => {
-    return res.render('signup.hbs')
+    logger.info('[GET] => /register');
+    res.sendFile('signup.html', { root: 'public' });
 }
 
 const getFailSignUp = (req, res) => {

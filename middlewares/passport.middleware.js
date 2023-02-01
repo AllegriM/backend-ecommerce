@@ -1,8 +1,8 @@
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy
-const Users = require('../models/daos/users/users.daos.mongo')
+const Users = require('../models/schemas/user.schema')
 const bcrypt = require('bcrypt');
-const { CarritosDao } = require("../models/daos/app.daos");
+const Carritos = require("../models/schemas/carritos.schema");
 
 passport.serializeUser((user, done) => {
     console.log("Estoy serializando", user)
@@ -29,8 +29,7 @@ passport.use('local-signup', new LocalStrategy({
     passReqToCallback: true
 },
     async (req, email, password, done) => {
-        console.log("Estoy en el signup", req.body)
-        const { name, address, age, phone, image, createdAt, updatedAt } = req.body
+        const { name, address, age, phone, createdAt, updatedAt } = req.body
 
         const user = await Users.findOne({ email });
         if (user) {
@@ -38,9 +37,9 @@ passport.use('local-signup', new LocalStrategy({
             return done(null, false)
         }
 
-        const cart = await CarritosDao.save({ items: [] });
+        const cart = await Carritos.create({ items: [] });
         const userItem = {
-            email: username,
+            email,
             password: createHash(password),
             name,
             address,
@@ -51,7 +50,7 @@ passport.use('local-signup', new LocalStrategy({
             createdAt,
             updatedAt
         };
-        const newUser = new Users(userItem)
+        const newUser = await Users.create(userItem)
         done(null, newUser)
     })
 )
@@ -61,8 +60,8 @@ passport.use('local-signin', new LocalStrategy({
     passwordField: "password",
     passReqToCallback: true
 },
-    async (req, username, password, done) => {
-        const user = await Users.findOne({ email: username })
+    async (req, email, password, done) => {
+        const user = await Users.findOne({ email })
         if (!user) {
             console.log('User not found with username', user)
             return done(null, false)
@@ -72,7 +71,7 @@ passport.use('local-signin', new LocalStrategy({
             return done(null, false)
         }
         console.log("Login successfully")
-        req.email = username
+        req.email = email
         return done(null, user)
     })
 )
