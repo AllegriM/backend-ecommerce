@@ -2,20 +2,24 @@ const { HTTP_STATUS } = require("../constants/api.constants");
 const logger = require("../middlewares/logs.middleware");
 const { CarritosDao } = require("../models/daos/app.daos");
 const { successResponse } = require("../utils/api.utils");
+const { CarritosMongoDao } = require('../models/daos/carritos/carritos.mongo.dao')
 
+const Cart = new CarritosMongoDao();
 const carritosDao = new CarritosDao();
 
 class CarritosController {
 
   async getAll(req, res, next) {
+    const cartId = req.user.cart;
     try {
-      const carritos = await carritosDao.getAll();
-      const response = successResponse(carritos);
-      logger.info('[get] => /cart');
-      res.status(HTTP_STATUS.OK).json(response);
-    }
-    catch (error) {
-      next(error);
+      const cart = await Cart.getByIdAndPopulate(cartId);
+      if (!cart) {
+        res.send('This item is already on your cart.');
+      }
+      logger.info(cart);
+      res.render('carts/cart.hbs', { cart });
+    } catch (error) {
+      logger.error(error);
     }
   }
 

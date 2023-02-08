@@ -21,7 +21,7 @@ class ProductsController {
         });
       }
       logger.info('[get] => /products');
-      return res.render("products/index", { products })
+      return res.render("products.hbs", { products })
     }
     catch (error) {
       next(error);
@@ -32,10 +32,9 @@ class ProductsController {
     const { id } = req.params;
     try {
       const product = await productsDao.getById(id);
-      const response = successResponse(product);
+      // const response = successResponse(product);
       logger.info('[get] => /products/:id');
-      res.status(HTTP_STATUS.OK).json(response);
-      return res.render("products/show", { product, user })
+      return res.render("products/show.hbs", { product, user })
     }
     catch (error) {
       next(error);

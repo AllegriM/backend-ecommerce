@@ -1,8 +1,10 @@
 function isAuthenticated(req, res, next) {
+    console.log('Estoy autenticado?:', req.isAuthenticated())
     if (req.isAuthenticated()) {
-        return next()
+        next()
+    } else {
+        return res.redirect('/signin')
     }
-    res.redirect('/signin')
 }
 
 module.exports = isAuthenticated

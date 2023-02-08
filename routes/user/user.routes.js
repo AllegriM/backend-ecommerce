@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
-const { signIn, signOut, signUp, getSignIn, getFailSignIn, getSignUp, getFailSignUp } = require('../../controllers/user.controllers')
+const { signOut, getSignIn, getFailSignIn, getSignUp, getFailSignUp } = require('../../controllers/user.controllers')
 const router = Router()
 const multer = require('multer');
 const path = require('path');
@@ -16,14 +16,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+router.post('/signin', passport.authenticate("signin", {
+    successRedirect: "/",
+    failureRedirect: "/failsignin",
+}));
+router.post('/signup', upload.single('image'), passport.authenticate("signup", { successRedirect: '/signin' }))
+
 // SIGNIN ROUTES
 router.get('/signin', getSignIn)
-router.post('/signin', passport.authenticate('local-signin', { failureRedirect: 'failsignin', successRedirect: '/' }), signIn)
 router.get('/failsignin', getFailSignIn)
 
 // SIGNUP ROUTES
 router.get('/signup', getSignUp)
-router.post('/signup', upload.single('image'), passport.authenticate('local-signup', { failureRedirect: 'failsignup', successRedirect: '/signin' }), signUp)
 router.get('/failsignup', getFailSignUp)
 
 // LOGOUT ROUTES

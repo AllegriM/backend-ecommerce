@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node config.js",
+    "build": "node server.js"
   },
   "author": "",
   "license": "ISC",

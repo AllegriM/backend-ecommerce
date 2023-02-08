@@ -5,14 +5,19 @@ const getSignIn = (req, res, next) => {
     res.sendFile('signin.html', { root: 'public' });
 }
 
-const signIn = async (req, res, next) => {
-    try {
-        let user = req.email
-        return res.render('home.hbs', { user })
-    } catch (error) {
-        console.log(error)
-    }
-}
+// const signIn = async (req, res, next) => {
+//     let user = req.user
+//     console.log(user)
+//     try {
+//         if (user) {
+//             console.log("Voy a redirigir al home con esta info", user)
+//             return res.render('home.hbs', { user })
+//         }
+//         return res.sendFile('signin.html', { root: 'public' });
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 const getFailSignIn = (req, res, next) => {
     return res.render('failsignin.hbs')
@@ -27,28 +32,44 @@ const getFailSignUp = (req, res) => {
     return res.render('failsignup.hbs')
 }
 
-const signUp = async (req, res, next) => {
-    let user = req.user
-    return res.render('failsignup.hbs')
-}
+// const signUp = async (req, res, next) => {
+//     try {
+//         let user = req.user
+//         if (user) {
+//             return res.sendFile('signin.html')
+//         }
+//         return res.redirect('/failsignup');
+//     }
+//     catch (error) {
+//         next(error)
+//     }
+// }
 
 
-const signOut = function (req, res, next) {
-    console.log(req.email)
-    let user = req.email
-    req.logout(function (err) {
-        if (err) { return next(err); }
-        res.render('logout.hbs', { user });
-    })
+const signOut = async function (req, res, next) {
+    logger.info('[GET] => /logout');
+    try {
+        await req.session.destroy((err) => {
+            if (err) {
+                logger.error(err);
+                res.clearCookie('user-session');
+            } else {
+                res.clearCookie('user-session');
+                res.redirect('/signin')
+            }
+        });
+    } catch (err) {
+        logger.error(err);
+    }
 };
 
 
 module.exports = {
     getSignIn,
-    signIn,
+    // signIn,
     getFailSignIn,
     getSignUp,
-    signUp,
+    // signUp,
     getFailSignUp,
     signOut
 }
