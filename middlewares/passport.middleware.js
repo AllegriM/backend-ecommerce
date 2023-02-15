@@ -1,10 +1,13 @@
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy
-const Users = require('../models/schemas/user.schema')
+const CarritosService = require('../services/cart.service')
+const UsersService = require("../services/users.service");
 const bcrypt = require('bcrypt');
-const Carritos = require("../models/schemas/carritos.schema");
 const logger = require("./logs.middleware");
 const { formatUserForDB } = require("../utils/formatuser.utils");
+
+const Users = new UsersService();
+const Carts = new CarritosService();
 
 function createHash(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
@@ -21,13 +24,13 @@ passport.use('signup', new LocalStrategy({
     async (req, email, password, done) => {
         const { name, address, age, phone, createdAt, updatedAt } = req.body
 
-        const user = await Users.findOne({ email });
+        const user = await Users.getByEmail(email);
         if (user) {
             console.log('User already exists');
             return done(null, false)
         }
 
-        const cart = await Carritos.create({ items: [] });
+        const cart = await Carts.createCart({ items: [] });
         const userItem = {
             email,
             password: createHash(password),
@@ -51,7 +54,7 @@ passport.use('signin', new LocalStrategy({
     usernameField: "email",
 },
     async (email, password, done) => {
-        const user = await Users.findOne({ email }).lean()
+        const user = await Users.getByEmail(email)
         if (!user) {
             console.log('User not found with username', user)
             return done(null, false)
@@ -69,7 +72,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-    const user = await Users.findById(id)
+    const user = await Users.getById(id)
     done(null, user)
 })
 

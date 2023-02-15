@@ -1,16 +1,15 @@
 const { Mongoose } = require("mongoose");
 const { HTTP_STATUS } = require("../constants/api.constants");
 const logger = require("../middlewares/logs.middleware");
-const { ProductsDao } = require("../models/daos/app.daos");
+const productsService = require('../services/products.service')
 const { successResponse } = require("../utils/api.utils");
 
-const productsDao = new ProductsDao();
-
+const Products = new productsService()
 class ProductsController {
 
   async getProducts(req, res, next) {
     try {
-      const products = await productsDao.getAll();
+      const products = await Products.getAll();
       if (req.email) {
         let content = products.length;
         let boolean = content.length !== 0;
@@ -31,7 +30,7 @@ class ProductsController {
   async getProductById(req, res, next) {
     const { id } = req.params;
     try {
-      const product = await productsDao.getById(id);
+      const product = await Products.getById(id);
       // const response = successResponse(product);
       logger.info('[get] => /products/:id');
       return res.render("products/show.hbs", { product, user })
@@ -42,14 +41,13 @@ class ProductsController {
   }
 
   async saveProduct(req, res, next) {
-    console.log(req.body)
     try {
       const product = {
-        timestamp: Date.now(),
+        _id: Mongoose.Types.ObjectId(),
+        timestamp: new Date(),
         ...req.body,
-      }
-
-      const newProduct = await productsDao.save(product);
+      };
+      const newProduct = await Products.create(product);
       const response = successResponse(newProduct);
       logger.info('[post] => /products');
       return res.status(HTTP_STATUS.CREATED).json(response);
@@ -62,7 +60,7 @@ class ProductsController {
   async updateProduct(req, res, next) {
     const { id } = req.params;
     try {
-      const updateProduct = await productsDao.update(id, req.body);
+      const updateProduct = await Products.update(id, req.body);
       const response = successResponse(updateProduct);
       logger.info('[put] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
@@ -75,7 +73,7 @@ class ProductsController {
   async deleteProduct(req, res, next) {
     const { id } = req.params;
     try {
-      const deletedProduct = await productsDao.delete(id);
+      const deletedProduct = await Products.delete(id);
       const response = successResponse(deletedProduct);
       logger.info('[del] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);

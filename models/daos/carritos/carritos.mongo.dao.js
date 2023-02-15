@@ -1,6 +1,6 @@
 const logger = require("../../../middlewares/logs.middleware");
 const MongoContainer = require("../../containers/mongo.container");
-const { carritosSchema } = require("../../schemas/carritos.schema");
+const carritosSchema = require("../../schemas/carritos.schema");
 
 const collection = "carritos";
 
@@ -41,6 +41,4 @@ class CarritosMongoDao extends MongoContainer {
   }
 }
 
-module.exports = {
-  CarritosMongoDao,
-};
+module.exports = CarritosMongoDao

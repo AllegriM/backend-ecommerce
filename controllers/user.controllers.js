@@ -1,75 +1,122 @@
 const logger = require("../middlewares/logs.middleware");
+const userService = require('../services/users.service')
 
-const getSignIn = (req, res, next) => {
-    logger.info('[GET] => /login');
-    res.sendFile('signin.html', { root: 'public' });
-}
+const User = new userService()
 
-// const signIn = async (req, res, next) => {
-//     let user = req.user
-//     console.log(user)
-//     try {
-//         if (user) {
-//             console.log("Voy a redirigir al home con esta info", user)
-//             return res.render('home.hbs', { user })
-//         }
-//         return res.sendFile('signin.html', { root: 'public' });
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-const getFailSignIn = (req, res, next) => {
-    return res.render('failsignin.hbs')
-}
-
-const getSignUp = (req, res) => {
-    logger.info('[GET] => /register');
-    res.sendFile('signup.html', { root: 'public' });
-}
-
-const getFailSignUp = (req, res) => {
-    return res.render('failsignup.hbs')
-}
-
-// const signUp = async (req, res, next) => {
-//     try {
-//         let user = req.user
-//         if (user) {
-//             return res.sendFile('signin.html')
-//         }
-//         return res.redirect('/failsignup');
-//     }
-//     catch (error) {
-//         next(error)
-//     }
-// }
-
-
-const signOut = async function (req, res, next) {
-    logger.info('[GET] => /logout');
-    try {
-        await req.session.destroy((err) => {
-            if (err) {
-                logger.error(err);
-                res.clearCookie('user-session');
-            } else {
-                res.clearCookie('user-session');
-                res.redirect('/signin')
-            }
-        });
-    } catch (err) {
-        logger.error(err);
+class UserController {
+    getSignIn = (req, res, next) => {
+        try {
+            logger.info('[GET] => /login');
+            res.sendFile('signin.html', { root: 'public' });
+        } catch (error) {
+            logger.error(error)
+        }
     }
-};
 
+    getFailSignIn = (req, res, next) => {
+        try {
+            return res.render('failsignin.hbs')
+        } catch (error) {
+            logger.error(error)
+        }
+    }
 
-module.exports = {
-    getSignIn,
-    // signIn,
-    getFailSignIn,
-    getSignUp,
-    // signUp,
-    getFailSignUp,
-    signOut
+    getSignUp = (req, res) => {
+        try {
+            logger.info('[GET] => /register');
+            res.sendFile('signup.html', { root: 'public' });
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+
+    getFailSignUp = (req, res) => {
+        try {
+            return res.render('failsignup.hbs')
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+
+    async signOut(req, res, next) {
+        logger.info('[GET] => /logout');
+        try {
+            await req.session.destroy((err) => {
+                if (err) {
+                    logger.error(err);
+                    res.clearCookie('user-session');
+                } else {
+                    res.clearCookie('user-session');
+                    res.redirect('/signin')
+                }
+            });
+        } catch (err) {
+            logger.error(err);
+        }
+    };
+
+    async getAll(req, res, next) {
+        try {
+            const users = await User.getAll();
+            const response = successResponse(users);
+            res.status(200).json(response);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    async getById(req, res, next) {
+        const { id } = req.params;
+        try {
+            const user = await User.getById(id);
+            const response = successResponse(user);
+            res.status(200).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async save(req, res, next) {
+        try {
+            const user = {
+                _id: Mongoose.Types.ObjectId(),
+                ...req.body,
+            };
+            await User.save(user);
+            const response = successResponse(user);
+            res.status(201).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async update(req, res, next) {
+        const { id } = req.params;
+        try {
+            const updatedUser = {
+                _id: id,
+                ...req.body,
+            };
+            await User.update(id, req.body);
+            const response = successResponse(updatedUser);
+            res.status(200).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteCart(req, res, next) {
+        const { id } = req.params;
+        try {
+            const deletedUser = await User.delete(id);
+            const response = successResponse(deletedUser);
+            res.status(200).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
+
+
+module.exports = new UserController();

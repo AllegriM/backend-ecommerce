@@ -1,6 +1,4 @@
-const { Schema, default: mongoose } = require('mongoose');
-
-const collection = "carritos";
+const { Schema } = require('mongoose');
 
 const productSchema = new Schema(
     {
@@ -32,6 +30,4 @@ const carritosSchema = new Schema(
     }
 );
 
-const carritos = mongoose.model(collection, carritosSchema);
-
-module.exports = carritos;
+module.exports = carritosSchema;

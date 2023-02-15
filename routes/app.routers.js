@@ -5,14 +5,14 @@ const error = require('./error/error.routes')
 const userRoute = require('./user/user.routes')
 const infoRoute = require('./info/info.routes')
 const logger = require('../middlewares/logs.middleware')
-const { CarritosMongoDao } = require('../models/daos/carritos/carritos.mongo.dao')
+const CartsServices = require('../services/cart.service')
 const { sendCheckoutEmail } = require('../middlewares/emailer.middleware');
 const { sendCheckoutWhatsapp, sendCheckoutSMS } = require('../middlewares/twilioMsg.middleware');
 const { ADMIN_EMAIL, ADMIN_PHONE } = require('../config');
 const isAuthenticated = require('../middlewares/auth.middleware')
 const router = express.Router();
 
-const Cart = new CarritosMongoDao();
+const Cart = new CartsServices();
 
 router.use('/cart', isAuthenticated, cartRoute)
 router.use('/products', isAuthenticated, productRoute)
@@ -38,7 +38,7 @@ router.post('/checkout', async (req, res) => {
     const cartId = req.user.cart;
     const { email, phone } = req.user;
     try {
-        const cart = await Cart.getByIdAndPopulate(cartId);
+        const cart = await Cart.getById(cartId);
         await sendCheckoutEmail(req.user, cart, ADMIN_EMAIL);
         await sendCheckoutWhatsapp(email, ADMIN_PHONE);
         await sendCheckoutSMS(email, phone);

@@ -1,6 +1,6 @@
-const { Schema, default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 
-const collection = "users";
+const Schema = mongoose.Schema;
 
 const UsersSchema = new Schema({
     email: {
@@ -22,6 +22,4 @@ const UsersSchema = new Schema({
 
 UsersSchema.index({ email: 1 });
 
-const Users = mongoose.model(collection, UsersSchema);
-
-module.exports = Users;
+module.exports = UsersSchema;

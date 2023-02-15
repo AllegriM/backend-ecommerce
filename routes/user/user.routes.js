@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
-const { signOut, getSignIn, getFailSignIn, getSignUp, getFailSignUp } = require('../../controllers/user.controllers')
+const UserController = require('../../controllers/user.controllers')
 const router = Router()
 const multer = require('multer');
 const path = require('path');
@@ -23,14 +23,14 @@ router.post('/signin', passport.authenticate("signin", {
 router.post('/signup', upload.single('image'), passport.authenticate("signup", { successRedirect: '/signin' }))
 
 // SIGNIN ROUTES
-router.get('/signin', getSignIn)
-router.get('/failsignin', getFailSignIn)
+router.get('/signin', UserController.getSignIn)
+router.get('/failsignin', UserController.getFailSignIn)
 
 // SIGNUP ROUTES
-router.get('/signup', getSignUp)
-router.get('/failsignup', getFailSignUp)
+router.get('/signup', UserController.getSignUp)
+router.get('/failsignup', UserController.getFailSignUp)
 
 // LOGOUT ROUTES
-router.get('/logout', signOut)
+router.get('/logout', UserController.signOut)
 
 module.exports = router
