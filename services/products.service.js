@@ -3,7 +3,13 @@ const Product = new ProductsDao();
 
 class ProductsServices {
     async create(userItem) {
-        return await Product.save(userItem);
+        const product = {
+            title: userItem.title.trim(),
+            price: userItem.price.trim(),
+            image: userItem.image.trim(),
+            stock: userItem.stock.trim(),
+        }
+        return await Product.save(product);
     }
 
     async getAll() {
