@@ -10,6 +10,9 @@ const { sendCheckoutEmail } = require('../middlewares/emailer.middleware');
 const { sendCheckoutWhatsapp, sendCheckoutSMS } = require('../middlewares/twilioMsg.middleware');
 const { ADMIN_EMAIL, ADMIN_PHONE } = require('../config');
 const isAuthenticated = require('../middlewares/auth.middleware')
+const { graphqlHTTP } = require('express-graphql')
+const GraphQLSchema = require('../graphql/schema')
+
 const router = express.Router();
 
 const Cart = new CartsServices();
@@ -18,6 +21,11 @@ router.use('/cart', isAuthenticated, cartRoute)
 router.use('/products', isAuthenticated, productRoute)
 router.use('/', infoRoute)
 router.use('/', userRoute)
+
+router.use('/graphql', graphqlHTTP({
+    schema: GraphQLSchema,
+    graphiql: true
+}))
 
 router.get('/', (req, res) => {
     try {
