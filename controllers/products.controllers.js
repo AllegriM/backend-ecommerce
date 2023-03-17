@@ -43,7 +43,6 @@ class ProductsController {
   async saveProduct(req, res, next) {
     try {
       const product = {
-        // _id: Mongoose.Types.ObjectId(),
         timestamp: new Date(),
         ...req.body,
       };
