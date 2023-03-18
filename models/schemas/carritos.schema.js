@@ -1,15 +1,44 @@
 const { Schema } = require('mongoose');
 
+// const productSchema = new Schema(
+//     {
+//         productId: {
+//             type: Schema.Types.ObjectId,
+//             ref: 'products',
+//         },
+//         quantity: {
+//             type: Number,
+//             required: true,
+//             min: [1, 'Quantity must be at least 1.'],
+//         },
+//     },
+//     {
+//         timestamps: true,
+//     }
+// );
+
 const productSchema = new Schema(
     {
-        productId: {
+        id: {
             type: Schema.Types.ObjectId,
             ref: 'products',
         },
-        quantity: {
+        title: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        stock: {
             type: Number,
             required: true,
             min: [1, 'Quantity must be at least 1.'],
+        },
+        image: {
+            type: String,
+            required: true,
         },
     },
     {
@@ -30,4 +59,4 @@ const carritosSchema = new Schema(
     }
 );
 
-module.exports = carritosSchema;
+module.exports = { carritosSchema, productSchema };
