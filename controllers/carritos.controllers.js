@@ -9,8 +9,8 @@ class CarritosController {
   async getAll(req, res, next) {
     const cartId = req.user.cart;
     try {
-      const cart = await Cart.getAll(cartId);
-      logger.info(cart);
+      const cart = await Cart.getById(cartId);
+      console.log(cart)
       res.render('cart/cart.hbs', { cart });
     } catch (error) {
       logger.error(error);

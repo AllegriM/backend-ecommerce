@@ -15,14 +15,14 @@ class CarritosMongoDao extends MongoContainer {
     return cart;
   }
 
-  async addProductToCart(cartId, productId) {
+  async addProductToCart(cartId, product) {
     try {
-      const updatedProductsToCart = await this.model.findByIdAndUpdate(cartId, {
+      const addProductToCart = await this.model.findByIdAndUpdate(cartId, {
         $push: {
-          products: [productId],
+          items: product,
         },
       });
-      return updatedProductsToCart;
+      return addProductToCart;
     } catch (error) {
       console.log(error.message);
     }

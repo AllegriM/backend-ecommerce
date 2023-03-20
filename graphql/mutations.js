@@ -63,6 +63,7 @@ const createProduct = {
     type: ProductType,
     description: "Create a new product",
     args: {
+        id: { type: GraphQLID },
         title: { type: GraphQLString },
         price: { type: GraphQLString },
         stock: { type: GraphQLString },

@@ -1,10 +1,12 @@
-const { Mongoose } = require("mongoose");
 const { HTTP_STATUS } = require("../constants/api.constants");
 const logger = require("../middlewares/logs.middleware");
 const productsService = require('../services/products.service')
+const defaultProducts = require('../data/products')
 const { successResponse } = require("../utils/api.utils");
+const CartsServices = require("../services/cart.service");
 
 const Products = new productsService()
+const Cart = new CartsServices()
 class ProductsController {
 
   async getProducts(req, res, next) {
@@ -31,9 +33,8 @@ class ProductsController {
     const { id } = req.params;
     try {
       const product = await Products.getById(id);
-      // const response = successResponse(product);
       logger.info('[get] => /products/:id');
-      return res.render("products/show.hbs", { product, user })
+      return res.render("products/show.hbs", { product })
     }
     catch (error) {
       next(error);
@@ -76,6 +77,19 @@ class ProductsController {
       const response = successResponse(deletedProduct);
       logger.info('[del] => /products/:id');
       res.status(HTTP_STATUS.OK).json(response);
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async addProductToCart(req, res, next) {
+    const { id } = req.params;
+    try {
+      const cartId = req.user.cart._id.toString();
+      const product = await Products.getById(id);
+      await Cart.addItemToCart(cartId, product);
+      res.redirect('/cart');
     }
     catch (error) {
       next(error);

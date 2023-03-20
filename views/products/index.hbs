@@ -1,17 +1,20 @@
 {{>nav}}
 
 
-<main class="m-4 relative h-max">
+<main style="flex; flex-wrap: 10px;">
 
 	<h1>Productos</h1>
 	<section class="">
 
-		<ul>
+		<ul class="">
 			{{#each products}}
 			<li>
 				<a href="/products/{{this._id}}" class="text-blue-300 font-bold no-underline">
 					{{this.title}}
 				</a>
+				<p class="text-gray-500">Stock: {{this.stock}}</p>
+				<p class="text-gray-500">Precio: ${{this.price}}</p>
+				<img src="{{this.image}}" alt="" class="w-30 h-30" width="200" height="200">
 			</li>
 			{{/each}}
 		</ul>

@@ -1,10 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const carritosControllers = require('../../controllers/carritos.controllers')
-const logger = require('../../middlewares/logs.middleware')
-const CarritosMongoDao = require('../../models/daos/carritos/carritos.mongo.dao')
-
-const Cart = new CarritosMongoDao();
 
 // router.get('/', async (req, res) => {
 //     const cartId = req.user.cart;
@@ -22,7 +18,7 @@ const Cart = new CarritosMongoDao();
 router.get('/', carritosControllers.getAll);
 router.get('/:id/carritos', carritosControllers.getCarritoById)
 router.post('/', carritosControllers.saveCarrito)
-router.post('/:id/carritos', carritosControllers.updateCarrito)
+router.put('/:id/carritos', carritosControllers.updateCarrito)
 router.delete('/:id', carritosControllers.deleteCarrito)
 
 module.exports = router

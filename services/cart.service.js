@@ -1,7 +1,8 @@
 const CartsDao = require('../models/daos/carritos/carritos.mongo.dao');
+const ProductsServices = require('./products.service');
 
 const Cart = new CartsDao()
-
+const Products = new ProductsServices()
 class CartsServices {
 
     async createCart() {
@@ -28,18 +29,16 @@ class CartsServices {
         return await Cart.delete(id);
     }
 
-    async addItemToCart(cartId, productId, quantity) {
+    async addItemToCart(cartId, productData) {
         const cart = await Cart.getById({ _id: cartId }, { __v: 0 });
-
+        const productId = productData._id.toString();
         if (cart) {
-            const cartItem = {
-                productId,
-                quantity,
-            };
-            if (cart.items.some((item) => item.productId == cartItem.productId)) {
+            const product = await Products.getById(productId);
+            console.log("Este es el producto", product)
+            if (cart.items.some((item) => item.productId == productId)) {
                 return false;
             }
-            const updatedCart = await Cart.addProductToCart(cartId, cartItem);
+            const updatedCart = await Cart.addProductToCart(cartId, product);
             return updatedCart;
         }
 

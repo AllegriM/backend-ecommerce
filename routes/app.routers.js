@@ -31,7 +31,6 @@ router.get('/', (req, res) => {
     try {
         logger.info('[GET] => /');
         const user = req.user;
-        console.log(user)
         if (user) {
             res.render('home.hbs', { user });
         } else {
@@ -46,7 +45,8 @@ router.post('/checkout', async (req, res) => {
     const cartId = req.user.cart;
     const { email, phone } = req.user;
     try {
-        const cart = await Cart.getById(cartId);
+        const cart = await Cart.getById(cartId)
+        await Cart.update(cartId, { items: [] });
         await sendCheckoutEmail(req.user, cart, ADMIN_EMAIL);
         await sendCheckoutWhatsapp(email, ADMIN_PHONE);
         await sendCheckoutSMS(email, phone);
