@@ -1,22 +1,5 @@
 const { Schema } = require('mongoose');
 
-// const productSchema = new Schema(
-//     {
-//         productId: {
-//             type: Schema.Types.ObjectId,
-//             ref: 'products',
-//         },
-//         quantity: {
-//             type: Number,
-//             required: true,
-//             min: [1, 'Quantity must be at least 1.'],
-//         },
-//     },
-//     {
-//         timestamps: true,
-//     }
-// );
-
 const productSchema = new Schema(
     {
         id: {
@@ -40,6 +23,11 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
+        quantity: {
+            type: Number,
+            required: true,
+            min: [1, 'Quantity must be at least 1.'],
+        }
     },
     {
         timestamps: true,

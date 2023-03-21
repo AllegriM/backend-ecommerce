@@ -29,16 +29,16 @@ class CartsServices {
         return await Cart.delete(id);
     }
 
-    async addItemToCart(cartId, productData) {
+    async addItemToCart(cartId, productData, quantity) {
         const cart = await Cart.getById({ _id: cartId }, { __v: 0 });
         const productId = productData._id.toString();
         if (cart) {
             const product = await Products.getById(productId);
-            console.log("Este es el producto", product)
             if (cart.items.some((item) => item.productId == productId)) {
-                return false;
+                // update quantity of existing product
+                await Cart.update({ _id: cartId, "items.productId": productId }, { $inc: { "items.$.quantity": quantity } });
             }
-            const updatedCart = await Cart.addProductToCart(cartId, product);
+            const updatedCart = await Cart.addProductToCart(cartId, product, quantity);
             return updatedCart;
         }
 

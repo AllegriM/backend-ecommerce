@@ -18,6 +18,7 @@ const app = express()
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, "public")));
 
 //Motor de plantillas
 app.engine(
@@ -30,6 +31,7 @@ app.engine(
             allowProtoPropertiesByDefault: true,
             allowProtoMethodsByDefault: true,
         },
+
     })
 );
 app.set("views", "./views");

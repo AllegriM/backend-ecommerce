@@ -10,8 +10,8 @@ class CarritosController {
     const cartId = req.user.cart;
     try {
       const cart = await Cart.getById(cartId);
-      console.log(cart)
-      res.render('cart/cart.hbs', { cart });
+      const subtotalPrice = cart.items.map((item) => item.price).reduce((a, b) => a + b, 0)
+      res.render('cart/cart.hbs', { cart, subtotalPrice });
     } catch (error) {
       logger.error(error);
     }

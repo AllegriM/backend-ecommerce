@@ -22,31 +22,37 @@ passport.use('signup', new LocalStrategy({
     passReqToCallback: true
 },
     async (req, email, password, done) => {
-        const { name, address, age, phone, createdAt, updatedAt } = req.body
 
-        const user = await Users.getByEmail(email);
-        if (user) {
-            console.log('User already exists');
-            return done(null, false)
+        try {
+            const { name, address, age, phone } = req.body
+            const user = await Users.getByEmail(email);
+            console.log(user)
+            if (user) {
+                console.log('User already exists');
+                return done(null, false)
+            }
+
+            const cart = await Carts.createCart({ items: [] });
+
+            const userItem = {
+                email,
+                password: createHash(password),
+                name,
+                address,
+                age,
+                phone,
+                cart,
+                // image: req.file.filename,
+            };
+
+            const formattedUser = formatUserForDB(userItem)
+            const newUser = await Users.create(formattedUser)
+            logger.info('User registration successful');
+            return done(null, newUser)
+        } catch (error) {
+            console.log(error)
+            done(error)
         }
-
-        const cart = await Carts.createCart({ items: [] });
-        const userItem = {
-            email,
-            password: createHash(password),
-            name,
-            address,
-            age,
-            phone,
-            cart,
-            image: req.file.filename,
-            createdAt,
-            updatedAt
-        };
-        const formattedUser = formatUserForDB(userItem)
-        const newUser = await Users.create(formattedUser)
-        logger.info('User registration successful');
-        return done(null, newUser)
     })
 )
 
@@ -54,6 +60,10 @@ passport.use('signin', new LocalStrategy({
     usernameField: "email",
 },
     async (email, password, done) => {
+        console.log({
+            email,
+            password
+        })
         const user = await Users.getByEmail(email)
         if (!user) {
             console.log('User not found with username', user)

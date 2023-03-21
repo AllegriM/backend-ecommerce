@@ -85,10 +85,11 @@ class ProductsController {
 
   async addProductToCart(req, res, next) {
     const { id } = req.params;
+    const { quantity } = req.body;
     try {
       const cartId = req.user.cart._id.toString();
       const product = await Products.getById(id);
-      await Cart.addItemToCart(cartId, product);
+      await Cart.addItemToCart(cartId, product, +quantity);
       res.redirect('/cart');
     }
     catch (error) {

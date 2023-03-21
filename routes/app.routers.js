@@ -4,6 +4,7 @@ const productRoute = require('./products/products.routes')
 const error = require('./error/error.routes')
 const userRoute = require('./user/user.routes')
 const infoRoute = require('./info/info.routes')
+const chatRoute = require('./chat/chat.routes')
 const logger = require('../middlewares/logs.middleware')
 const CartsServices = require('../services/cart.service')
 const { sendCheckoutEmail } = require('../middlewares/emailer.middleware');
@@ -21,6 +22,7 @@ router.use('/cart', isAuthenticated, cartRoute)
 router.use('/products', isAuthenticated, productRoute)
 router.use('/', infoRoute)
 router.use('/', userRoute)
+router.use('/chat', isAuthenticated, chatRoute)
 
 router.use('/graphql', graphqlHTTP({
     schema: GraphQLSchema,

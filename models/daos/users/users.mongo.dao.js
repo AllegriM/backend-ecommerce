@@ -3,7 +3,7 @@ const { HttpError } = require('../../../utils/api.utils');
 const UserSchema = require('../../schemas/user.schema');
 const constants = require('../../../constants/api.constants');
 
-const collection = 'Users';
+const collection = 'users';
 
 class UsersDao extends MongoContainer {
     constructor() {
@@ -41,10 +41,11 @@ class UsersDao extends MongoContainer {
 
     async getByEmail(email) {
         try {
-            const document = await this.model.findOne({ email }, { __v: 0 }).lean();
+            // Find a user with given email
+            const document = await this.model.findOne({ email }, { __v: 0 }).lean()
             if (!document) {
                 const errorMessage = `Wrong username or password`;
-                throw new HttpError(constants.HTTP_STATUS.NOT_FOUND, errorMessage);
+                // throw new HttpError(constants.HTTP_STATUS.NOT_FOUND, errorMessage);
             } else {
                 return document;
             }

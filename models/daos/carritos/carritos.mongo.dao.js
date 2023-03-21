@@ -15,11 +15,23 @@ class CarritosMongoDao extends MongoContainer {
     return cart;
   }
 
-  async addProductToCart(cartId, product) {
+  async addProductToCart(cartId, product, quantity) {
+    console.log(product, quantity)
     try {
+      const cart = await this.model.findById(cartId);
+      console.log(cart)
+      console.log(cart.items.map((item) => item.price).reduce((a, b) => a + b, 0))
       const addProductToCart = await this.model.findByIdAndUpdate(cartId, {
         $push: {
-          items: product,
+          items: {
+            productId: product._id,
+            quantity: quantity,
+            price: product.price * quantity,
+            title: product.title,
+            stock: product.stock - quantity,
+            image: product.image,
+          },
+          subtotal: cart.items.map((item) => item.price).reduce((a, b) => a + b, 0)
         },
       });
       return addProductToCart;
