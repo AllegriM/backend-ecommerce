@@ -1,0 +1,32 @@
+{{> nav}}
+
+<main class="m-4 relative h-max">
+
+	<h1>Create NEW Product</h1>
+    {{!-- Input to add Name --}}
+	<form method="post" action="/products/new">
+		<div class="container p-0 mb-3">
+			<label for="title">Nombre</label>
+			<input placeholder="Nombre" type="text" id="title" name="title" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		{{!-- Input to add Price --}}
+		<div class="container p-0 mb-3">
+			<label for="price">Precio</label>
+			<input placeholder="Precio" type="number" min="1" id="price" name="price" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		{{!-- Input to add Stock --}}
+		<div class="container p-0 mb-3">
+			<label for=stock"">Stock</label>
+			<input placeholder="Stock" type="number" min="1" max="100" id="stock" name="stock" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		{{!-- Input to add Image --}}
+		<div class="container p-0 mb-3">
+			<label for="image">URL de la imagen</label>
+			<input placeholder="URL de la imagen" type="text" id="image" name="image" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		<button type="submit" style="background-color: green;" class="px-3 py-2 rounded my-3 text-white hover:bg-green-500 h-10 ">
+			Crear Producto
+		</button>
+	</form>
+
+</main>

@@ -1,10 +1,12 @@
 {{>nav}}
 
 <main class="m-4 relative h-max">
-
+	<a href="/products/update/{{{product.id}}}" class="text-blue-500 fw-bold hover:text-blue-700">Modificar Producto</a>
+	<a href="/products/delete/{{{product.id}}}" class="text-danger fw-bold hover:text-red-700">Eliminar Producto</a>
+	
 	<h1>{{product.title}}</h1>
 	<div class="container p-0 mb-3">
-		<img src="{{product.image}}" alt="">
+		<img src="{{product.image}}" alt="" height="200" width="200">
 	</div>
 
 	<section class="">

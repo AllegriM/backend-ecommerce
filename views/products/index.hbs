@@ -2,14 +2,14 @@
 
 
 <main style="flex; flex-wrap: 10px;">
-
+	<a href="/products/new" class="text-success fw-bold no-underline">Agregar Producto</a>
 	<h1>Productos</h1>
 	<section class="">
 
-		<ul class="">
+		<ul class="d-flex flex-wrap list-unstyled">
 			{{#each products}}
-			<li>
-				<a href="/products/{{this._id}}" class="text-blue-300 font-bold no-underline">
+			<li class="p-4 border">
+				<a href="/products/{{this._id}}" class="text-blue-300 fw-bold no-underline">
 					{{this.title}}
 				</a>
 				<p class="text-gray-500">Stock: {{this.stock}}</p>

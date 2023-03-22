@@ -8,6 +8,11 @@ const ProductsSchema = new Schema({
   price: { type: Number },
   image: { type: String },
   stock: { type: Number },
+  creatorId: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  },
+  quantity: { type: Number, default: 1 },
 });
 
 class ProductsMongoDao extends MongoContainer {

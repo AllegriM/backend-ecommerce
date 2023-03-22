@@ -1,0 +1,33 @@
+{{> nav}}
+
+<main class="m-4 relative h-max">
+
+	<h1>Create NEW Product</h1>
+    {{!-- Input to add Name --}}
+	<form method="post" action="/products/update/{{{product.id}}}">
+		{{!-- Input to add Price --}}
+		<div class="container p-0 mb-3">
+            <label for="title">Titulo</label>
+			<input value={{{product.title}}} placeholder="Titulo" type="text" id="title" name="title" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		{{!-- Input to add Stock --}}
+		<div class="container p-0 mb-3">
+            <label for="stock">Stock</label>
+			<input value={{{product.stock}}} placeholder="Stock" type="number" min="1" max="100" id="stock" name="stock" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		{{!-- Input to add quantity --}}
+		<div class="container p-0 mb-3">
+            <label for="price">Price</label>
+			<input value={{{product.price}}} placeholder="Price" type="number" min="1" max="1000000" id="price" name="price" class="rounded h-10 p-2 w-16 mr-2" >
+		</div>
+		{{!-- Input to add Image --}}
+		<div class="container p-0 mb-3">
+            <label for="image">URL de la imagen</label>
+			<input value={{{product.image}}} placeholder="URL de la imagen" type="text" id="image" name="image" class="rounded h-10 p-2 w-12 mr-2" >
+		</div>
+		<button type="submit" style="background-color: green;" class="px-3 py-2 rounded my-3 text-white hover:bg-green-500 h-10 ">
+			Editar Producto
+		</button>
+	</form>
+
+</main>

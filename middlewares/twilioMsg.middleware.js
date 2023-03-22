@@ -14,7 +14,7 @@ const sendCheckoutWhatsapp = async (userEmail, phoneNumber) => {
     try {
         const messageResponse = await twilioClient.messages.create({
             body: `Nuevo pedido de ${userEmail}`,
-            from: TWILIO_WHATSAPP,
+            from: TWILIO_PHONE_NUMBER,
             to: `whatsapp:${phoneNumber}`,
         });
     } catch (error) {

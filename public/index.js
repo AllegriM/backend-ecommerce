@@ -88,10 +88,11 @@ function renderMessages(messages) {
     let html = ''
 
     messages.forEach(msg => {
-        const date = new Date(msg.date)
+        // get date with day hour and minutes
+        const date = new Date(msg.date).toLocaleString()
         html += `
       <div class="mt-2">
-        <span class="text-xs text-amber-400">${date.toLocaleDateString()}</span>
+        <span class="text-xs text-amber-400">${date}</span>
         <span class="text-xs text-amber-400">${msg.email}:</span>
         <span class="text-sm text-gray-900">${msg.text}</span>
       </div>

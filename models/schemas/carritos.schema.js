@@ -6,6 +6,10 @@ const productSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'products',
         },
+        creatorId: {
+            type: Schema.Types.ObjectId,
+            ref: 'users',
+        },
         title: {
             type: String,
             required: true,

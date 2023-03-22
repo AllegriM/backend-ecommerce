@@ -8,6 +8,8 @@ class ProductsServices {
             price: userItem.price.trim(),
             image: userItem.image.trim(),
             stock: userItem.stock.trim(),
+            quantity: 1,
+            creatorId: userItem.creatorId,
         }
         return await Product.save(product);
     }

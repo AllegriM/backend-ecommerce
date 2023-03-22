@@ -1,0 +1,23 @@
+{{>nav}}
+
+<main class="m-4 relative h-max">
+
+    <h1>{{product.title}}</h1>
+	<div class="container p-0 mb-3">
+		<img src="{{product.image}}" alt="" height="200" width="200">
+	</div>
+
+	<section class="">
+		<span class="my-3">
+			Precio: <strong>${{product.price}}</strong>
+		</span>
+	</section>
+
+    <form method="post" action="">
+        <button class="bg-danger fw-bold rounded">
+            Eliminar Producto
+        </button>
+    </form>
+
+
+</main>

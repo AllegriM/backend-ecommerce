@@ -42,15 +42,28 @@ class ProductsController {
   }
 
   async saveProduct(req, res, next) {
+    const { _id } = req.user;
     try {
       const product = {
         timestamp: new Date(),
+        creatorId: _id,
         ...req.body,
       };
-      const newProduct = await Products.create(product);
-      const response = successResponse(newProduct);
-      logger.info('[post] => /products');
-      return res.status(HTTP_STATUS.CREATED).json(response);
+      await Products.create(product);
+      logger.info('[post] => /products/new');
+      return res.redirect('/products');
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async getUpdate(req, res, next) {
+    const { id } = req.params;
+    try {
+      const product = await Products.getById(id);
+      logger.info('[get] => /products/:id/update');
+      return res.render("products/update.hbs", { product })
     }
     catch (error) {
       next(error);
@@ -60,10 +73,27 @@ class ProductsController {
   async updateProduct(req, res, next) {
     const { id } = req.params;
     try {
-      const updateProduct = await Products.update(id, req.body);
-      const response = successResponse(updateProduct);
-      logger.info('[put] => /products/:id');
-      res.status(HTTP_STATUS.OK).json(response);
+      const productToUpdate = await Products.getById(id);
+      if (!productToUpdate.creatorId) {
+        return res.redirect('/products');
+      }
+      if (req.user._id.toString() === productToUpdate.creatorId.toString()) {
+        await Products.update(id, req.body);
+        logger.info('[put] => /products/:id');
+        res.redirect('/products');
+      }
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async getDelete(req, res, next) {
+    const { id } = req.params;
+    try {
+      const product = await Products.getById(id);
+      logger.info('[get] => /products/delete/:id');
+      return res.render("products/delete.hbs", { product })
     }
     catch (error) {
       next(error);
@@ -73,10 +103,15 @@ class ProductsController {
   async deleteProduct(req, res, next) {
     const { id } = req.params;
     try {
-      const deletedProduct = await Products.delete(id);
-      const response = successResponse(deletedProduct);
-      logger.info('[del] => /products/:id');
-      res.status(HTTP_STATUS.OK).json(response);
+      const productToDelete = await Products.getById(id);
+      if (!productToDelete.creatorId) {
+        return res.redirect('/products');
+      }
+      if (req.user._id.toString() === productToDelete.creatorId.toString()) {
+        await Products.delete(id);
+        logger.info('[del] => /products/:id');
+        return res.redirect('/products');
+      }
     }
     catch (error) {
       next(error);
@@ -91,6 +126,18 @@ class ProductsController {
       const product = await Products.getById(id);
       await Cart.addItemToCart(cartId, product, +quantity);
       res.redirect('/cart');
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async newProduct(req, res, next) {
+    console.log(req.user)
+
+    try {
+      logger.info('[get] => /products/new');
+      return res.render("products/new.hbs");
     }
     catch (error) {
       next(error);
