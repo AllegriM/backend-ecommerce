@@ -46,7 +46,8 @@ app.use(session({
         ttl: 60
     }),
     cookie: {
-        maxAge: 1000 * 60 * 60 * 48,
+        // Last for 30 minutes
+        maxAge: 1000 * 60 * 30,
     },
     rolling: true,
     resave: false,

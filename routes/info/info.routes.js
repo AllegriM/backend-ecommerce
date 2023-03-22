@@ -25,7 +25,6 @@ router.get('/infozip', compression(), getInfo)
 router.get('/profile', async (req, res) => {
     let user = req.user;
     try {
-        console.log("Estoy en profile con esta data", user)
         return res.render('profile.hbs', { user });
     } catch (error) {
         console.log(error)

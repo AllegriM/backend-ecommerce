@@ -1,7 +1,6 @@
 const express = require('express')
 const cartRoute = require('./cart/cart.routes')
 const productRoute = require('./products/products.routes')
-const error = require('./error/error.routes')
 const userRoute = require('./user/user.routes')
 const infoRoute = require('./info/info.routes')
 const chatRoute = require('./chat/chat.routes')
@@ -49,7 +48,7 @@ router.post('/checkout', async (req, res) => {
     try {
         const cart = await Cart.getById(cartId)
         await Cart.update(cartId, { items: [] });
-        await sendCheckoutEmail(req.user, cart, ADMIN_EMAIL);
+        await sendCheckoutEmail(req.user, cart.items, ADMIN_EMAIL);
         await sendCheckoutWhatsapp(email, ADMIN_PHONE);
         await sendCheckoutSMS(email, phone);
         res.send('Su pedido fue procesado de forma exitosa.');

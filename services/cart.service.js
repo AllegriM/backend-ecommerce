@@ -32,29 +32,37 @@ class CartsServices {
     async addItemToCart(cartId, productData, quantity) {
         const cart = await Cart.getById({ _id: cartId }, { __v: 0 });
         const productId = productData._id.toString();
-        if (cart) {
-            const product = await Products.getById(productId);
-            if (cart.items.some((item) => item.productId == productId)) {
-                // update quantity of existing product
-                await Cart.update({ _id: cartId, "items.productId": productId }, { $inc: { "items.$.quantity": quantity } });
+        try {
+            if (cart) {
+                const product = await Products.getById(productId);
+                if (cart.items.some((item) => item.productId == productId)) {
+                    // update quantity of existing product
+                    await Cart.update({ _id: cartId, "items.productId": productId }, { $inc: { "items.$.quantity": quantity } });
+                }
+                const updatedCart = await Cart.addProductToCart(cartId, product, quantity);
+                return updatedCart;
             }
-            const updatedCart = await Cart.addProductToCart(cartId, product, quantity);
-            return updatedCart;
+            const message = `Cart with id ${cartId} does not exist in our records.`;
+            throw new HttpError(HTTP_STATUS.NOT_FOUND, message);
+        } catch (error) {
+            console.log(error)
         }
-
-        const message = `Cart with id ${cartId} does not exist in our records.`;
-        throw new HttpError(HTTP_STATUS.NOT_FOUND, message);
     };
 
     async removeItemFromCart(cartId, itemId) {
         const cart = await Cart.getById({ _id: cartId }, { __v: 0 });
 
-        if (cart) {
-            const updatedCart = await Cart.removeProductFromCart(cartId, itemId);
-            return updatedCart;
+        try {
+            if (cart) {
+                const updatedCart = await Cart.removeProductFromCart(cartId, itemId);
+                return updatedCart;
+            }
+            const message = `Cart with id ${cartId} does not exist in our records.`;
+            throw new HttpError(HTTP_STATUS.NOT_FOUND, message);
+        } catch (error) {
+            console.log(error)
         }
-        const message = `Cart with id ${cartId} does not exist in our records.`;
-        throw new HttpError(HTTP_STATUS.NOT_FOUND, message);
+
     };
 }
 
