@@ -1,7 +1,6 @@
 const { HTTP_STATUS } = require("../constants/api.constants");
 const logger = require("../middlewares/logs.middleware");
 const productsService = require('../services/products.service')
-const defaultProducts = require('../data/products')
 const { successResponse } = require("../utils/api.utils");
 const CartsServices = require("../services/cart.service");
 
@@ -33,8 +32,12 @@ class ProductsController {
     const { id } = req.params;
     try {
       const product = await Products.getById(id);
-      logger.info('[get] => /products/:id');
-      return res.render("products/show.hbs", { product })
+      if (product) {
+        logger.info('[get] => /products/:id');
+        return res.render("products/show.hbs", { product })
+      } else {
+        return res.status(HTTP_STATUS.NOT_FOUND).json(successResponse({}))
+      }
     }
     catch (error) {
       next(error);
@@ -138,6 +141,19 @@ class ProductsController {
     try {
       logger.info('[get] => /products/new');
       return res.render("products/new.hbs");
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async getByCategory(req, res, next) {
+    const { category } = req.params;
+    try {
+
+      const products = await Products.getByCategory(category.toLowerCase());
+      logger.info('[get] => /products/category/:category');
+      return res.render("products.hbs", { products, category })
     }
     catch (error) {
       next(error);

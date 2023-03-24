@@ -7,6 +7,7 @@ class ProductsServices {
             title: userItem.title.trim(),
             price: userItem.price.trim(),
             image: userItem.image.trim(),
+            category: userItem.category.toLowerCase().trim(),
             stock: userItem.stock.trim(),
             quantity: 1,
             creatorId: userItem.creatorId,
@@ -16,6 +17,10 @@ class ProductsServices {
 
     async getAll() {
         return await Product.getAll();
+    }
+
+    async getByCategory(category) {
+        return await Product.getByCategory(category);
     }
 
     async getById(id) {

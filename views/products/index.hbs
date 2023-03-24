@@ -5,7 +5,9 @@
 	<a href="/products/new" class="text-success fw-bold no-underline">Agregar Producto</a>
 	<h1>Productos</h1>
 	<section class="">
-
+		{{#if category}}
+			<h2 class="text-blue-300 fw-bold">Categoría: {{category}}</h2>
+		{{/if}}
 		<ul class="d-flex flex-wrap list-unstyled">
 			{{#each products}}
 			<li class="p-4 border">
@@ -14,7 +16,7 @@
 				</a>
 				<p class="text-gray-500">Stock: {{this.stock}}</p>
 				<p class="text-gray-500">Precio: ${{this.price}}</p>
-				<img src="{{this.image}}" alt="" class="w-30 h-30" width="200" height="200">
+				<img src="{{this.image}}" alt="" class="w-30 h-30 object-contain" width="200" height="200">
 			</li>
 			{{/each}}
 		</ul>

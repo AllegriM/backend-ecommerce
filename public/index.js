@@ -93,7 +93,7 @@ function renderMessages(messages) {
         html += `
       <div class="mt-2">
         <span class="text-xs text-amber-400">${date}</span>
-        <span class="text-xs text-amber-400">${msg.email}:</span>
+        <a href="chat/${msg.email}" class="text-xs text-amber-400">${msg.email}:</a>
         <span class="text-sm text-gray-900">${msg.text}</span>
       </div>
     `

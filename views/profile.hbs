@@ -13,8 +13,6 @@
 	<span class="block">
 		<strong>Teléfono: </strong> {{user.phone}}
 	</span>
-	<strong>Imagen: </strong> {{user.image}}
-	<span>
-		<img src="data/avatars/{{user.image}}" alt="">
-	</span>
+	<strong>Imagen: </strong>
+	<img src="{{{imageURL}}}" type="text/x-handlebars-template" alt="Imagen de perfil" height="100" width="100">
 </main>

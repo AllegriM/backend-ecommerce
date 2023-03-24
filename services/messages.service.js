@@ -12,6 +12,10 @@ class MessagesService {
     async save(message, email) {
         return await MessagesDao.save(message, email);
     }
+
+    async getMessagesByEmail(email) {
+        return await MessagesDao.getMessagesByEmail(email);
+    }
 }
 
 module.exports = MessagesService

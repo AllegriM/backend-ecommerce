@@ -12,5 +12,6 @@ router.post('/delete/:id', productsControllers.deleteProduct)
 router.get('/delete/:id', productsControllers.getDelete)
 router.get('/:id', productsControllers.getProductById)
 router.post('/:id', productsControllers.addProductToCart)
+router.get('/category/:category', productsControllers.getByCategory)
 
 module.exports = router

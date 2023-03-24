@@ -12,12 +12,21 @@ const ProductsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users',
   },
+  category: { type: String },
   quantity: { type: Number, default: 1 },
 });
 
 class ProductsMongoDao extends MongoContainer {
   constructor() {
     super(collection, ProductsSchema);
+  }
+
+  async getByCategory(category) {
+    const products = await this.model.find({ category });
+    if (!products) {
+      return null;
+    }
+    return products;
   }
 }
 

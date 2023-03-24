@@ -26,6 +26,17 @@ class ChatController {
             next(error);
         }
     }
+    async getChatByEmail(req, res, next) {
+        try {
+            const { email } = req.params;
+            const messages = await Chat.getMessagesByEmail(email);
+            console.log(messages)
+            logger.info("[get] => /chat/:email");
+            res.sendFile(path.resolve('public/chat.html', { messages }));
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new ChatController();

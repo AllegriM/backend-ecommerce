@@ -24,8 +24,10 @@ router.get('/infozip', compression(), getInfo)
 
 router.get('/profile', async (req, res) => {
     let user = req.user;
+    const imageURL = user.image ? `/data/avatars/${user.image}` : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png';
+    console.log(imageURL)
     try {
-        return res.render('profile.hbs', { user });
+        return res.render('profile.hbs', { user, imageURL });
     } catch (error) {
         console.log(error)
     }

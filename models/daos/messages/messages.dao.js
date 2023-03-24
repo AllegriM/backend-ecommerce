@@ -13,6 +13,9 @@ class MessagesDao extends MongoDao {
     async saveMessage(message, email) {
         return await this.create({ message, email });
     }
+    async getMessagesByEmail(email) {
+        return await this.model.find({ email });
+    }
 }
 
 module.exports = new MessagesDao();
