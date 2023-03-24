@@ -7,8 +7,7 @@ const chatRoute = require('./chat/chat.routes')
 const logger = require('../middlewares/logs.middleware')
 const CartsServices = require('../services/cart.service')
 const { sendCheckoutEmail } = require('../middlewares/emailer.middleware');
-const { sendCheckoutWhatsapp, sendCheckoutSMS } = require('../middlewares/twilioMsg.middleware');
-const { ADMIN_EMAIL, ADMIN_PHONE } = require('../config');
+const { ADMIN_EMAIL } = require('../config');
 const isAuthenticated = require('../middlewares/auth.middleware')
 const { graphqlHTTP } = require('express-graphql')
 const GraphQLSchema = require('../graphql/schema')
@@ -44,13 +43,12 @@ router.get('/', (req, res) => {
 
 router.post('/checkout', async (req, res) => {
     const cartId = req.user.cart;
-    const { email, phone } = req.user;
     try {
         const cart = await Cart.getById(cartId)
         await Cart.update(cartId, { items: [] });
         await sendCheckoutEmail(req.user, cart.items, ADMIN_EMAIL);
-        await sendCheckoutWhatsapp(email, ADMIN_PHONE);
-        await sendCheckoutSMS(email, phone);
+        // await sendCheckoutWhatsapp(email, ADMIN_PHONE);
+        // await sendCheckoutSMS(email, phone);
         res.send('Su pedido fue procesado de forma exitosa.');
     } catch (error) {
         logger.error(error);

@@ -34,4 +34,4 @@ const sendCheckoutSMS = async (userEmail, phoneNumber) => {
     }
 };
 
-module.exports = { sendCheckoutWhatsapp, sendCheckoutSMS }; 2
+module.exports = { sendCheckoutWhatsapp, sendCheckoutSMS };
