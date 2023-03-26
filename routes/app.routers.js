@@ -47,8 +47,6 @@ router.post('/checkout', async (req, res) => {
         const cart = await Cart.getById(cartId)
         await Cart.update(cartId, { items: [] });
         await sendCheckoutEmail(req.user, cart.items, ADMIN_EMAIL);
-        // await sendCheckoutWhatsapp(email, ADMIN_PHONE);
-        // await sendCheckoutSMS(email, phone);
         res.send('Su pedido fue procesado de forma exitosa.');
     } catch (error) {
         logger.error(error);
