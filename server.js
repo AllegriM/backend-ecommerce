@@ -15,7 +15,10 @@ const Message = new MessageServices();
 
 const PORT = args.PORT || 8080;
 
-app.use(cors())
+// Socket.io
+const httpServer = new HttpServer(app);
+const io = new SocketServer(httpServer)
+httpServer.use(cors())
 
 if (clusterMode && cluster.isMaster) {
     const cpus = os.cpus().length;
@@ -27,9 +30,7 @@ if (clusterMode && cluster.isMaster) {
         cluster.fork()
     })
 } else {
-    // Socket.io
-    const httpServer = new HttpServer(app);
-    const io = new SocketServer(httpServer)
+
     // Listen
     logger.info(`Worker process ${process.pid} is running.`);
 
