@@ -1,4 +1,3 @@
-const API_BASE_URL = `http://localhost:8080/chat`
 
 /* Grab the necessary elements from the DOM, form, inputs, success indicators, etc. */
 const messagesContainer = document.getElementById('messages')
