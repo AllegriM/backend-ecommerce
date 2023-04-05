@@ -1,3 +1,4 @@
+const API_BASE_URL = `http://localhost:8080/chat` || 'https://backend-ecommerce-production-5e7f.up.railway.app/chat'
 
 /* Grab the necessary elements from the DOM, form, inputs, success indicators, etc. */
 const messagesContainer = document.getElementById('messages')
